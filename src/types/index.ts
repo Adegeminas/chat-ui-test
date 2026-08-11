@@ -10,11 +10,11 @@ export type LoginPayload = {
 export type Chat = {
   id: number;
   name: string;
-  avatar: string;
+  avatar: number; // 1 .. 5
   online: boolean;
   lastMessage: string;
-  lastMassageAt: string;
-}
+  lastMessageAt: string;
+};
 
 export type Message = {
   id: number | string; // стринги для ошибок отправки
@@ -23,4 +23,4 @@ export type Message = {
   createdAt: string;
   fromMe: boolean;
   failed?: boolean;
-}
+};

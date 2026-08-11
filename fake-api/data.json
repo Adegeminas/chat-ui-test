@@ -1,4 +1,31 @@
 {
-  "chats": [],
-  "messages": []
+  "chats": [{
+    "id": 1,
+    "name": "Вася",
+    "avatar": 1,
+    "online": true,
+    "lastMessage": "Test message uncutted 12346",
+    "lastMessageAt": "2026-08-11T00:00:00.000Z"    
+  }, {
+    "id": 2,
+    "name": "Петя",
+    "avatar": 2,
+    "online": false,
+    "lastMessage": "Test message uncutted 12346",
+    "lastMessageAt": "2026-08-10T00:00:00.000Z"    
+  }, {
+    "id": 3,
+    "name": "Маша",
+    "avatar": 3,
+    "online": true,
+    "lastMessage": "Test message uncutted 12346",
+    "lastMessageAt": "2026-07-11T00:00:00.000Z"    
+  }],
+  "messages": [{
+    "id": 1,
+    "chatId": 1,
+    "text": "Test 2",
+    "createdAt": "2026-08-11T00:00:00.000Z",
+    "fromMe": true
+  }]
 }
