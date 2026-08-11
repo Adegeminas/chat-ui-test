@@ -15,5 +15,12 @@ module.exports = async (req, res, next) => {
     return res.status(401).json({ message: 'Неверный логин или пароль' });
   }
 
+  if (req.method === 'POST' && req.path === '/messages') {
+    const text = String(req.body?.text ?? '').trim();
+    if (text === 'fail') {
+      return res.status(500).json({ message: 'Не удалось отправить сообщение' });
+    }
+  }
+
   next();
 };

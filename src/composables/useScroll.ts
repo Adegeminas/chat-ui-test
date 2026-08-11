@@ -4,7 +4,7 @@ export function useScroll({
     node,
     target,
     onIntersect,
-    treshhold = '50px',
+    treshhold = '100px',
 }: {
     node: Ref<HTMLElement | null>,
     target: Ref<HTMLElement | null>,

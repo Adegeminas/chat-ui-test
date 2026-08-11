@@ -45,7 +45,7 @@ export const useChatsStore = defineStore('chats', () => {
     }
 
     chat.lastMessage = text;
-    chat.lastMassageAt = updated;
+    chat.lastMessageAt = updated;
     items.value = [chat, ...items.value.filter((chat) => chat.id !== chatId)];
   };
 
