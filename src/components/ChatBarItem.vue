@@ -50,6 +50,8 @@ defineEmits<{
   background: #fff;
   border: 0;
   cursor: pointer;
+  height: 100px;
+  border: 1px dotted gray;
 }
 
 .item:hover {

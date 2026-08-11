@@ -6,7 +6,7 @@
           <h1>Чаты</h1>
         </header>
 
-        <div>
+        <div ref="chatsBlock" class="sidebar__list">
           <ChatBarItem
             v-for="chat in chats.items"
             :key="chat.id"
@@ -14,6 +14,7 @@
             :active="chat.id === chats.selectedId"
             @select="selectChat(chat.id)"
           />
+          <div ref="chatsEdge" class="h-3" />
         </div>
       </aside>
 
@@ -27,13 +28,19 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import ChatBarItem from '../components/ChatBarItem.vue';
 import { useChatsStore } from '../stores/chats';
 import { useMessagesStore } from '../stores/messages.js';
+import { useScroll } from '../composables/useScroll.js';
 
 const chats = useChatsStore();
 const messages = useMessagesStore();
+
+const chatsBlock = ref<HTMLElement | null>(null)
+const chatsEdge = ref<HTMLElement | null>(null)
+const messagesBlock = ref<HTMLElement | null>(null)
+const messagesEdge = ref<HTMLElement | null>(null)
 
 const selectedChat = computed(() => {
   return chats.items.find(chat => chat.id === chats.selectedId) ?? null
@@ -47,6 +54,12 @@ const selectChat = async (id: number) => {
   await messages.openChat(id);
   //
 }
+
+useScroll({
+  node: chatsBlock,
+  target: chatsEdge,
+  onIntersect: () => chats.loadMore(),
+});
 
 onMounted(() => {
   chats.loadMore();
@@ -79,5 +92,17 @@ onMounted(() => {
   min-width: 120px;
   border-right: 1px solid black;
   background: white;
+}
+
+.sidebar__list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 </style>

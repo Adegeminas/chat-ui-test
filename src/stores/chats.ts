@@ -3,7 +3,7 @@ import { type Chat } from '../types';
 import { ref } from 'vue';
 import { api } from '../api';
 
-const PAGE_SIZE = 25;
+const PAGE_SIZE = 10;
 
 export const useChatsStore = defineStore('chats', () => {
   const items = ref<Chat[]>([]);
