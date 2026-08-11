@@ -14,7 +14,7 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: LoginView,
-      meta: { loginFlow: true }
+      meta: { loginFlow: true },
     },
     {
       path: '/chat',
@@ -25,7 +25,7 @@ const router = createRouter({
     {
       path: '/:pathMatch(.*)*',
       redirect: '/',
-    }
+    },
   ],
 });
 
@@ -33,11 +33,11 @@ router.beforeEach((to) => {
   const auth = useAuthStore();
 
   if (to.meta.requiresAuth && !auth.hasAuth) {
-    return { name: 'login' }
+    return { name: 'login' };
   }
   if (to.meta.loginFlow && auth.hasAuth) {
-    return { name: 'chat' }
+    return { name: 'chat' };
   }
-})
+});
 
 export default router;
