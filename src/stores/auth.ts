@@ -6,23 +6,23 @@ import { type AuthResponse, type LoginPayload } from '../types';
 const TOKEN_KEY = 'auth_token';
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref<string | null>(localStorage.getItem(TOKEN_KEY));
-  const hasAuth = computed(() => !!token.value);
+	const token = ref<string | null>(localStorage.getItem(TOKEN_KEY));
+	const hasAuth = computed(() => !!token.value);
 
-  const login = async (payload: LoginPayload) => {
-    const data = await api<AuthResponse>('/login', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+	const login = async (payload: LoginPayload) => {
+		const data = await api<AuthResponse>('/login', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		});
 
-    token.value = data.token;
-    localStorage.setItem(TOKEN_KEY, data.token);
-  };
+		token.value = data.token;
+		localStorage.setItem(TOKEN_KEY, data.token);
+	};
 
-  const logout = () => {
-    token.value = null;
-    localStorage.removeItem(TOKEN_KEY);
-  };
+	const logout = () => {
+		token.value = null;
+		localStorage.removeItem(TOKEN_KEY);
+	};
 
-  return { token, hasAuth, login, logout };
+	return { token, hasAuth, login, logout };
 });

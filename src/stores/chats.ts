@@ -6,56 +6,65 @@ import { api } from '../api';
 const PAGE_SIZE = 10;
 
 export const useChatsStore = defineStore('chats', () => {
-  const items = ref<Chat[]>([]);
-  const page = ref(0);
-  const hasMore = ref(true);
-  const loading = ref(false);
-  const selectedId = ref<number | null>(null);
+	const items = ref<Chat[]>([]);
+	const page = ref(0);
+	const hasMore = ref(true);
+	const loading = ref(false);
+	const selectedId = ref<number | null>(null);
 
-  const loadMore = async () => {
-    if (loading.value || !hasMore.value) {
-      return;
-    }
+	const loadMore = async () => {
+		if (loading.value || !hasMore.value) {
+			return;
+		}
 
-    loading.value = true;
+		loading.value = true;
 
-    try {
-      const nextPage = page.value + 1;
-      const data = await api<Chat[]>(
-        `/chats?_page=${nextPage}&_limit=${PAGE_SIZE}&_sort=lastMessageAt&_order=desc`,
-      );
+		try {
+			const nextPage = page.value + 1;
+			const data = await api<Chat[]>(
+				`/chats?_page=${nextPage}&_limit=${PAGE_SIZE}&_sort=lastMessageAt&_order=desc`,
+			);
 
-      items.value.push(...data);
-      page.value = nextPage;
-      hasMore.value = data.length === PAGE_SIZE;
-    } catch {
-    } finally {
-      loading.value = false;
-    }
-  };
+			items.value.push(...data);
+			page.value = nextPage;
+			hasMore.value = data.length === PAGE_SIZE;
+		} catch {
+		} finally {
+			loading.value = false;
+		}
+	};
 
-  const selectChat = (id: number) => {
-    selectedId.value = id;
-  };
+	const selectChat = (id: number) => {
+		selectedId.value = id;
+	};
 
-  const updateLastMessage = (chatId: number, text: string, updated: string) => {
-    const chat = items.value.find((chat) => chat.id === chatId);
-    if (!chat) {
-      return;
-    }
+	const clear = () => {
+		items.value = [];
+		page.value = 0;
+		hasMore.value = true;
+		loading.value = false;
+		selectedId.value = null;
+	};
 
-    chat.lastMessage = text;
-    chat.lastMessageAt = updated;
-    items.value = [chat, ...items.value.filter((chat) => chat.id !== chatId)];
-  };
+	const updateLastMessage = (chatId: number, text: string, updated: string) => {
+		const chat = items.value.find((chat) => chat.id === chatId);
+		if (!chat) {
+			return;
+		}
 
-  return {
-    items,
-    page,
-    loading,
-    selectedId,
-    loadMore,
-    selectChat,
-    updateLastMessage,
-  };
+		chat.lastMessage = text;
+		chat.lastMessageAt = updated;
+		items.value = [chat, ...items.value.filter((chat) => chat.id !== chatId)];
+	};
+
+	return {
+		items,
+		page,
+		loading,
+		selectedId,
+		loadMore,
+		selectChat,
+		clear,
+		updateLastMessage,
+	};
 });

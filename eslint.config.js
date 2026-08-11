@@ -3,20 +3,20 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting';
 
 export default defineConfigWithVueTs(
-  {
-    name: 'app/files-to-lint',
-    files: ['**/*.{ts,mts,tsx,vue}'],
-  },
-  {
-    name: 'app/files-to-ignore',
-    ignores: ['**/dist/**', '**/node_modules/**'],
-  },
-  pluginVue.configs['flat/recommended'],
-  vueTsConfigs.recommended,
-  {
-    rules: {
-      'vue/multi-word-component-names': 'off',
-    },
-  },
-  skipFormatting,
+	{
+		name: 'app/files-to-lint',
+		files: ['**/*.{ts,mts,tsx,vue}'],
+	},
+	{
+		name: 'app/files-to-ignore',
+		ignores: ['**/dist/**', '**/node_modules/**'],
+	},
+	pluginVue.configs['flat/recommended'],
+	vueTsConfigs.recommended,
+	{
+		rules: {
+			'vue/multi-word-component-names': 'off',
+		},
+	},
+	skipFormatting,
 );

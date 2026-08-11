@@ -3,24 +3,24 @@ const DELAY = 350;
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 module.exports = async (req, res, next) => {
-  console.log('new request');
+	console.log('new request');
 
-  await sleep(DELAY);
+	await sleep(DELAY);
 
-  if (req.method === 'POST' && req.path === '/login') {
-    if (req.body?.login === 'username' && req.body?.password === 'password') {
-      return res.status(200).json({ token: 'valid-token' });
-    }
+	if (req.method === 'POST' && req.path === '/login') {
+		if (req.body?.login === 'user' && req.body?.password === 'password') {
+			return res.status(200).json({ token: 'valid-token' });
+		}
 
-    return res.status(401).json({ message: 'Неверный логин или пароль' });
-  }
+		return res.status(401).json({ message: 'Неверный логин или пароль' });
+	}
 
-  if (req.method === 'POST' && req.path === '/messages') {
-    const text = String(req.body?.text ?? '').trim();
-    if (text === 'fail') {
-      return res.status(500).json({ message: 'Не удалось отправить сообщение' });
-    }
-  }
+	if (req.method === 'POST' && req.path === '/messages') {
+		const text = String(req.body?.text ?? '').trim();
+		if (text === 'fail') {
+			return res.status(500).json({ message: 'Не удалось отправить сообщение' });
+		}
+	}
 
-  next();
+	next();
 };
