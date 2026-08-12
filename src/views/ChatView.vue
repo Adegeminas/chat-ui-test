@@ -4,15 +4,17 @@
 	>
 		<div class="flex h-full w-full max-w-[1920px] overflow-hidden bg-white">
 			<aside
-				class="flex w-[35%] min-w-30 min-h-0 flex-col border-r border-slate-300 bg-white"
+				class="@container flex w-[min(400px,30%)] min-w-30 min-h-0 shrink-0 flex-col border-r border-slate-300 bg-white"
 			>
 				<header
-					class="flex items-center justify-between gap-2 border-b border-slate-300 p-2.5"
+					class="flex flex-col items-stretch gap-1.5 border-b border-slate-300 p-2 @min-[180px]:flex-row @min-[180px]:items-center @min-[180px]:justify-between @min-[180px]:gap-2 @min-[180px]:p-2.5"
 				>
-					<h1 class="m-0 text-xl font-semibold text-slate-800">Чаты</h1>
+					<h1 class="m-0 min-w-0 truncate text-lg font-semibold text-slate-800 @min-[180px]:text-xl">
+						Чаты
+					</h1>
 					<button
 						type="button"
-						class="cursor-pointer rounded-lg border-0 bg-sky-700 px-2.5 py-1.5 font-medium text-white hover:bg-sky-800"
+						class="shrink-0 cursor-pointer rounded-lg border-0 bg-sky-700 px-2 py-1.5 text-sm font-medium whitespace-nowrap text-white hover:bg-sky-800 @min-[180px]:px-2.5"
 						@click="onLogout"
 					>
 						Выход
@@ -31,7 +33,7 @@
 				</div>
 			</aside>
 
-			<section class="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-100">
+			<section class="@container flex min-h-0 min-w-0 flex-1 flex-col bg-slate-100">
 				<template v-if="selectedChat">
 					<header
 						class="flex items-center gap-2.5 border-b border-slate-300 bg-white p-2.5"
@@ -79,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import ChatBarItem from '../components/ChatBarItem.vue';
 import MessageItem from '../components/MessageItem.vue';
@@ -112,11 +114,14 @@ const scrollToBottom = async () => {
 };
 
 const selectChat = async (id: number) => {
-	if (chats.selectedId === id) {
+	if (messages.chatId === id) {
+		chats.selectChat(id);
 		return;
 	}
 	chats.selectChat(id);
-	await messages.openChat(id);
+	messages.openChat(id);
+	await nextTick();
+	await fillMessages();
 	await scrollToBottom();
 };
 
@@ -138,27 +143,24 @@ useScroll({
 	onIntersect: () => chats.loadMore(),
 });
 
-useScroll({
+const { fill: fillMessages } = useScroll({
 	node: messagesBlock,
 	target: messagesEdge,
 	treshhold: '80px',
 	onIntersect: async () => {
 		const el = messagesBlock.value;
 		if (!el) {
-			return;
+			return false;
 		}
 
 		const prevHeight = el.scrollHeight;
 		const prevTop = el.scrollTop;
 
-		await messages.loadMore();
+		const loaded = await messages.loadMore();
 		await nextTick();
 
 		el.scrollTop = el.scrollHeight - prevHeight + prevTop;
+		return loaded;
 	},
-});
-
-onMounted(() => {
-	chats.loadMore();
 });
 </script>

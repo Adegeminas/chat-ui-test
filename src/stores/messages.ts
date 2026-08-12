@@ -4,7 +4,7 @@ import { api } from '../api';
 import { useChatsStore } from './chats';
 import { type Message } from '../types';
 
-const PAGE_SIZE = 50;
+const PAGE_SIZE = 20;
 
 export const useMessagesStore = defineStore('messages', () => {
 	const items = ref<Message[]>([]);
@@ -14,24 +14,19 @@ export const useMessagesStore = defineStore('messages', () => {
 	const loading = ref(false);
 	const sending = ref(false);
 
-	const clear = () => {
+
+	const openChat = (id: number) => {
 		items.value = [];
-		chatId.value = null;
 		page.value = 0;
 		hasMore.value = true;
 		loading.value = false;
 		sending.value = false;
-	};
-
-	const openChat = async (id: number) => {
-		clear();
 		chatId.value = id;
-		await loadMore();
 	};
 
 	const loadMore = async () => {
 		if (loading.value || !hasMore.value || chatId.value === null) {
-			return;
+			return false;
 		}
 
 		const nextChat = chatId.value;
@@ -44,13 +39,15 @@ export const useMessagesStore = defineStore('messages', () => {
 			);
 
 			if (chatId.value !== nextChat) {
-				return;
+				return false;
 			}
 
 			items.value = [...data.slice().reverse(), ...items.value];
 			page.value = nextPage;
 			hasMore.value = data.length === PAGE_SIZE;
+			return data.length > 0;
 		} catch {
+			return false;
 		} finally {
 			if (chatId.value === nextChat) {
 				loading.value = false;
@@ -100,6 +97,15 @@ export const useMessagesStore = defineStore('messages', () => {
 		} finally {
 			sending.value = false;
 		}
+	};
+
+	const clear = () => {
+		items.value = [];
+		chatId.value = null;
+		page.value = 0;
+		hasMore.value = true;
+		loading.value = false;
+		sending.value = false;
 	};
 
 	return {

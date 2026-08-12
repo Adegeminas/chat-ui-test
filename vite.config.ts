@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
 	plugins: [vue(), tailwindcss()],
 	server: {
+		watch: {
+			ignored: ['**/fake-api/**'],
+		},
 		proxy: {
 			'/api': {
 				target: 'http://127.0.0.1:3000',

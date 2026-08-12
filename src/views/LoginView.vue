@@ -59,7 +59,7 @@
 			<button
 				type="submit"
 				data-testid="submit-button"
-				class="mt-3 rounded-lg bg-sky-700 px-3 py-3 font-medium text-white transition hover:bg-sky-800 disabled:cursor-default disabled:opacity-60"
+				class="cursor-pointer mt-3 rounded-lg bg-sky-700 px-3 py-3 font-medium text-white transition hover:bg-sky-800 disabled:cursor-default disabled:opacity-60"
 				:disabled="pending"
 			>
 				{{ pending ? 'Входим…' : 'Войти' }}

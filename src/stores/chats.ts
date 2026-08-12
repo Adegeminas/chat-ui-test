@@ -14,7 +14,7 @@ export const useChatsStore = defineStore('chats', () => {
 
 	const loadMore = async () => {
 		if (loading.value || !hasMore.value) {
-			return;
+			return false;
 		}
 
 		loading.value = true;
@@ -28,7 +28,9 @@ export const useChatsStore = defineStore('chats', () => {
 			items.value.push(...data);
 			page.value = nextPage;
 			hasMore.value = data.length === PAGE_SIZE;
+			return data.length > 0;
 		} catch {
+			return false;
 		} finally {
 			loading.value = false;
 		}
@@ -47,14 +49,19 @@ export const useChatsStore = defineStore('chats', () => {
 	};
 
 	const updateLastMessage = (chatId: number, text: string, updated: string) => {
-		const chat = items.value.find((chat) => chat.id === chatId);
-		if (!chat) {
+		const index = items.value.findIndex((chat) => chat.id === chatId);
+		if (index === -1) {
 			return;
 		}
 
+		const chat = items.value[index];
 		chat.lastMessage = text;
 		chat.lastMessageAt = updated;
-		items.value = [chat, ...items.value.filter((chat) => chat.id !== chatId)];
+
+		if (index > 0) {
+			items.value.splice(index, 1);
+			items.value.unshift(chat);
+		}
 	};
 
 	return {
