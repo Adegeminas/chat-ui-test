@@ -14,7 +14,6 @@ export const useMessagesStore = defineStore('messages', () => {
 	const loading = ref(false);
 	const sending = ref(false);
 
-
 	const openChat = (id: number) => {
 		items.value = [];
 		page.value = 0;
@@ -34,9 +33,7 @@ export const useMessagesStore = defineStore('messages', () => {
 
 		try {
 			const nextPage = page.value + 1;
-			const data = await api<Message[]>(
-				`/messages?chatId=${nextChat}&_page=${nextPage}&_limit=${PAGE_SIZE}&_sort=createdAt&_order=desc`,
-			);
+			const data = await api.getMessages(nextChat, nextPage, PAGE_SIZE);
 
 			if (chatId.value !== nextChat) {
 				return false;
@@ -65,14 +62,11 @@ export const useMessagesStore = defineStore('messages', () => {
 		sending.value = true;
 
 		try {
-			const saved = await api<Message>(`/messages`, {
-				method: 'POST',
-				body: JSON.stringify({
-					chatId: activeChat,
-					text,
-					createdAt,
-					fromMe: true,
-				}),
+			const saved = await api.sendMessage({
+				chatId: activeChat,
+				text,
+				createdAt,
+				fromMe: true,
 			});
 
 			if (chatId.value !== activeChat) {

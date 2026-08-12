@@ -3,8 +3,6 @@ const DELAY = 350;
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 module.exports = async (req, res, next) => {
-	console.log('new request');
-
 	await sleep(DELAY);
 
 	if (req.method === 'POST' && req.path === '/login') {

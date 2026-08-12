@@ -21,9 +21,7 @@ export const useChatsStore = defineStore('chats', () => {
 
 		try {
 			const nextPage = page.value + 1;
-			const data = await api<Chat[]>(
-				`/chats?_page=${nextPage}&_limit=${PAGE_SIZE}&_sort=lastMessageAt&_order=desc`,
-			);
+			const data = await api.getChats(nextPage, PAGE_SIZE);
 
 			items.value.push(...data);
 			page.value = nextPage;

@@ -1,23 +1,35 @@
-export async function api<T>(path: string, params: RequestInit = {}): Promise<T> {
-	const headers = new Headers(params.headers);
-	if (params.body) {
-		headers.set('Content-Type', 'application/json');
-	}
-	const response = await fetch(`/api${path}`, { ...params, headers });
+import { http } from './http';
+import { type AuthResponse, type Chat, type LoginPayload, type Message } from '../types';
 
-	if (!response.ok) {
-		let errorMsg = 'Неизвестная ошибка';
+export const api = {
+	login(payload: LoginPayload) {
+		return http<AuthResponse>('/login', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		});
+	},
 
-		try {
-			const data = (await response.json()) as { message: string };
-			if (data.message) {
-				errorMsg = data.message;
-			}
-		} catch {}
-		throw new Error(errorMsg);
-	}
+	getChats(page: number, limit: number) {
+		return http<Chat[]>(
+			`/chats?_page=${page}&_limit=${limit}&_sort=lastMessageAt&_order=desc`,
+		);
+	},
 
-	if (response.status === 204) return undefined as T;
+	getMessages(chatId: number, page: number, limit: number) {
+		return http<Message[]>(
+			`/messages?chatId=${chatId}&_page=${page}&_limit=${limit}&_sort=createdAt&_order=desc`,
+		);
+	},
 
-	return (await response.json()) as T;
-}
+	sendMessage(payload: {
+		chatId: number;
+		text: string;
+		createdAt: string;
+		fromMe: boolean;
+	}) {
+		return http<Message>('/messages', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		});
+	},
+};

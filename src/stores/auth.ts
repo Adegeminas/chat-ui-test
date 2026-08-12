@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { api } from '../api';
-import { type AuthResponse, type LoginPayload } from '../types';
+import { type LoginPayload } from '../types';
 
 const TOKEN_KEY = 'auth_token';
 
@@ -10,10 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
 	const hasAuth = computed(() => !!token.value);
 
 	const login = async (payload: LoginPayload) => {
-		const data = await api<AuthResponse>('/login', {
-			method: 'POST',
-			body: JSON.stringify(payload),
-		});
+		const data = await api.login(payload);
 
 		token.value = data.token;
 		localStorage.setItem(TOKEN_KEY, data.token);

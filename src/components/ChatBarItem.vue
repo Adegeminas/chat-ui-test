@@ -36,12 +36,12 @@ defineEmits<{
 		<div class="min-w-0 flex-1">
 			<div class="flex items-baseline justify-between gap-1">
 				<span class="truncate font-semibold text-slate-800">{{ chat.name }}</span>
-				<span class="hidden shrink-0 text-xs text-slate-500 @min-[200px]:inline">
+				<span class="hidden shrink-0 text-xs text-slate-500 @min-50:inline">
 					{{ messageTime(chat.lastMessageAt) }}
 				</span>
 			</div>
 			<p class="m-0 truncate text-sm text-slate-500">{{ chat.lastMessage }}</p>
-			<span class="mt-0.5 block text-xs text-slate-500 @min-[200px]:hidden">
+			<span class="mt-0.5 block text-xs text-slate-500 @min-50:hidden">
 				{{ messageTime(chat.lastMessageAt) }}
 			</span>
 		</div>
