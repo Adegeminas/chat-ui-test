@@ -9,7 +9,9 @@
 				<header
 					class="flex flex-col items-stretch gap-1.5 border-b border-slate-300 p-2 @min-[180px]:flex-row @min-[180px]:items-center @min-[180px]:justify-between @min-[180px]:gap-2 @min-[180px]:p-2.5"
 				>
-					<h1 class="m-0 min-w-0 truncate text-lg font-semibold text-slate-800 @min-[180px]:text-xl">
+					<h1
+						class="m-0 min-w-0 truncate text-lg font-semibold text-slate-800 @min-[180px]:text-xl"
+					>
 						Чаты
 					</h1>
 					<button

@@ -10,9 +10,7 @@ export const api = {
 	},
 
 	getChats(page: number, limit: number) {
-		return http<Chat[]>(
-			`/chats?_page=${page}&_limit=${limit}&_sort=lastMessageAt&_order=desc`,
-		);
+		return http<Chat[]>(`/chats?_page=${page}&_limit=${limit}&_sort=lastMessageAt&_order=desc`);
 	},
 
 	getMessages(chatId: number, page: number, limit: number) {
@@ -21,12 +19,7 @@ export const api = {
 		);
 	},
 
-	sendMessage(payload: {
-		chatId: number;
-		text: string;
-		createdAt: string;
-		fromMe: boolean;
-	}) {
+	sendMessage(payload: { chatId: number; text: string; createdAt: string; fromMe: boolean }) {
 		return http<Message>('/messages', {
 			method: 'POST',
 			body: JSON.stringify(payload),
